@@ -21,10 +21,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+# SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = 'django-insecure-xn-1mqst%l+dp5d)$2@8uttysu*7^@rd)uqvt0fao08mic-wo1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -80,23 +81,23 @@ AUTH_USER_MODEL = "core.User"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'da65hj3r3e7pol',
-        'USER':'hheyhibeghxcxn',
-        'PASSWORD':'3cee35a61362a7ca80b5a9313c3aae26cc28a805591c31b2974bd3c0ba018b2e',
-        'HOST':'ec2-34-198-186-145.compute-1.amazonaws.com',
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'da65hj3r3e7pol',
+#         'USER':'hheyhibeghxcxn',
+#         'PASSWORD':'3cee35a61362a7ca80b5a9313c3aae26cc28a805591c31b2974bd3c0ba018b2e',
+#         'HOST':'ec2-34-198-186-145.compute-1.amazonaws.com',
+#         'PORT': '5432'
+#     }
+# }
 
 
 # Password validation
