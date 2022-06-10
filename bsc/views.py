@@ -6,6 +6,7 @@ from .serializers import KPISerializer
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework import status
+from django.http import JsonResponse
 from .models import KPI, Objectives
 
 # Create your views here.
@@ -45,11 +46,16 @@ class Kpi(generics.GenericAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class KPIAPIView(APIView):   
-    def get(self, request, format=None):
-        kpis = KPI.objects.all()
-        serializer = KPISerializer(kpis, many=True)
-        return Response(serializer.data)
+# class KPIAPIView(APIView):   
+#     def get(self, request, format=None):
+#         kpis = KPI.objects.all()
+#         serializer = KPISerializer(kpis, many=True)
+#         return Response(serializer.data)
+
+def KPIAPIView(request):
+    kpis = KPI.objects.all()
+    serializer = KPISerializer(kpis, many=True)
+    return JsonResponse(serializer.data, safe=False)
         
 
 

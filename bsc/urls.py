@@ -3,6 +3,6 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from .views import *
 
 urlpatterns = [
-    path('kpi/', KPIAPIView.as_view()),
+    path('kpi/', KPIAPIView),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)
