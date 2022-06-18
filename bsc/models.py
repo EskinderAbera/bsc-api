@@ -21,26 +21,6 @@ class Objectives(models.Model):
     objective_weight = models.FloatField(blank=False)
     perspective = models.ForeignKey(Perspective, on_delete=models.CASCADE)
 
-    # class Types(models.TextChoices):
-    #     January = "January", "January"
-    #     February = "February", "February"
-    #     March = "March", "March"
-    #     April = "April", "April"
-    #     May = "May", "May"
-    #     June = "June", "June"
-    #     July = "July", "July"
-    #     August = "August", "August"
-    #     September = "September", "September"
-    #     October = "October", "October"
-    #     November = "November", "November"
-    #     December = "December", "December"
-
-    # default_month = Types.January
-
-    # month = models.CharField(
-    #     _("Type"), max_length=50, choices=Types.choices, default=default_month
-    # )
-
     def __str__(self):
         return f"{self.objective_name}"
 
@@ -66,18 +46,18 @@ class KPI(models.Model):
     perspective = models.ForeignKey(Perspective, on_delete=models.CASCADE)
     objective = models.ForeignKey(Objectives, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    January = models.FloatField(blank=True, null=True)
-    February = models.FloatField(blank=True, null=True)
-    March = models.FloatField(blank=True, null=True)
-    April = models.FloatField(blank=True, null=True)
-    May = models.FloatField(blank=True, null=True)
-    June = models.FloatField(blank=True, null=True)
-    July = models.FloatField(blank=True, null=True)
-    August = models.FloatField(blank=True, null=True)
-    September = models.FloatField(blank=True, null=True)
-    October = models.FloatField(blank=True, null=True)
-    November = models.FloatField(blank=True, null=True)
-    December = models.FloatField(blank=True, null=True)
+    January = models.FloatField(blank=True, default=0)
+    February = models.FloatField(blank=True, default=0)
+    March = models.FloatField(blank=True, default=0)
+    April = models.FloatField(blank=True, default=0)
+    May = models.FloatField(blank=True, default=0)
+    June = models.FloatField(blank=True, default=0)
+    July = models.FloatField(blank=True, default=0)
+    August = models.FloatField(blank=True, default=0)
+    September = models.FloatField(blank=True, default=0)
+    October = models.FloatField(blank=True, default=0)
+    November = models.FloatField(blank=True, default=0)
+    December = models.FloatField(blank=True, default=0)
     Score_January = models.FloatField(blank=True, default=0)
     Score_February = models.FloatField(blank=True, default=0)
     Score_March = models.FloatField(blank=True, default=0)

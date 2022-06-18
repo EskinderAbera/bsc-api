@@ -1,6 +1,4 @@
-from dataclasses import fields
-from pyexpat import model
-from .models import KPI, Objectives
+from .models import KPI
 from rest_framework import serializers
 
 
@@ -22,4 +20,18 @@ class KPISerializer(serializers.Serializer):
     Score_November = serializers.FloatField()
     Score_December = serializers.FloatField()
     aggregate = serializers.FloatField()
+
+class KPIEditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KPI
+        fields = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+
+class ObjectiveSerializer(serializers.Serializer):
+    perspective = serializers.CharField(max_length=120)
+    objective_name = serializers.CharField(max_length=120)
     
+class AddKPISerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KPI
+        fields = ['kpi_name', 'kpi_weight', 'kpi_target', 'perspective', 'objective', 'user']
