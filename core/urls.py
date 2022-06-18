@@ -16,5 +16,6 @@ urlpatterns = [
     path('role_detail/<str:pk>/', role_detail),
     path('auth/register/', RegisterAPIView.as_view()),
     path('auth/user/<str:pk>/', UserDetail.as_view()),
+    path('auth/login/', LoginAPIView.as_view()),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

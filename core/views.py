@@ -7,6 +7,7 @@ from django.http import Http404
 from rest_framework import status
 from .models import *
 from .serializers import *
+from django.contrib.auth.models import update_last_login
 
 # Create your views here.
 
@@ -90,6 +91,16 @@ def role_detail(request, pk):
     elif request.method == 'DELETE':
         role.delete()
         return HttpResponse(status=204)
+
+
+class LoginAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = LoginSerializers(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            user = serializer.validated_data['user']
+            update_last_login(None, user)
+            return Response({"status": status.HTTP_200_OK, "data": "user"})
+        return Response({"status": status.HTTP_404_NOT_FOUND, "data": serializer.errors})
 
 
 class RegisterAPIView(APIView):   
