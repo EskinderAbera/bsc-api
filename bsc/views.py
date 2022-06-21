@@ -1,6 +1,6 @@
 from core.models import User
 from rest_framework.views import APIView
-from .serializers import KPISerializer, KPIEditSerializer, AddKPISerializer
+from .serializers import KPISerializer, AddActualKPISerializer, AddKPISerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import JsonResponse
@@ -16,7 +16,7 @@ class KPIAPIView(APIView):
         return Response(serializer.data)
 
 
-class EditKPIAPIView(APIView):
+class AddActualKPIAPIView(APIView):
 
     def get_object(self, name):
         try:
@@ -26,7 +26,7 @@ class EditKPIAPIView(APIView):
 
     def put(self, request, name, format=None):
         kpi = self.get_object(name)
-        serializer = KPIEditSerializer(kpi, data=request.data)
+        serializer = AddActualKPISerializer(kpi, data=request.data)
         if serializer.is_valid():
             if float(request.data.get("January", kpi.January)) != kpi.January and  float(request.data.get("January", kpi.January)) > float(0) and float(kpi.January) > float(0):
                 return Response({"Error": "You have already added Actual Value for January!"})
@@ -85,6 +85,31 @@ class AddKPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class EditKPIAPIView(APIView):
+    def get_object(self, name):
+            try:
+                return KPI.objects.get(kpi_name=name)
+            except User.DoesNotExist:
+                raise Http404
+
+    def put(self, request, name, format=None):
+        kpi = self.get_object(name)
+        user = User.objects.get(username = "admin")
+        request.data['user'] = user.id
+        perspective = Perspective.objects.get(perspective_name = request.data['perspective'])
+        request.data['perspective'] = perspective.perspective_id
+        objective = Objectives.objects.get(objective_name = request.data['objective'])
+        request.data['objective'] = objective.objective_id
+        serializer = AddKPISerializer(kpi, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            serialized_data = serializer.data
+            serialized_data['perspective'] = perspective.perspective_name
+            serialized_data['objective'] = objective.objective_name
+            serialized_data['user'] = user.username
+            return Response(serialized_data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 

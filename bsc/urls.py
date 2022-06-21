@@ -5,7 +5,8 @@ from .views import *
 urlpatterns = [
     path('kpi/', KPIAPIView.as_view()),
     path('objective/', ObjectiveAPI.as_view()),
-    path('kpiedit/<str:name>/', EditKPIAPIView.as_view()),
-    path('add/kpi/', AddKPIView.as_view())
+    path('add/actual/kpi/<str:name>/', AddActualKPIAPIView.as_view()),
+    path('add/kpi/', AddKPIView.as_view()),
+    path('edit/kpi/<str:name>/', EditKPIAPIView.as_view())
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)
