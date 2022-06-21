@@ -15,8 +15,14 @@ from django.http import Http404
 class KPIAPIView(APIView):   
     def get(self, request, format=None):
         kpis = KPI.objects.all()
-        serializer = KPISerializer(kpis, many=True)
-        return Response(serializer.data)
+        KPIS = []
+        for kpi in kpis:
+            actual_aggregate = kpi.January + kpi.February + kpi.March + kpi.April + kpi.May + kpi.June + kpi.July + kpi.August + kpi.September +  kpi.October + kpi.November + kpi.December
+            serializer = KPISerializer(kpi)
+            serialized_data = serializer.data
+            serialized_data['actual_aggregate'] = actual_aggregate
+            KPIS.append(serialized_data)
+        return Response(KPIS)
 
 
 class AddActualKPIAPIView(APIView):
