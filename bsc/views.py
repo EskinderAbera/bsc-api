@@ -1,6 +1,3 @@
-from os import stat
-
-from requests import delete
 from core.models import User
 from rest_framework.views import APIView
 from .serializers import KPISerializer, AddActualKPISerializer, AddKPISerializer
@@ -22,7 +19,7 @@ class KPIAPIView(APIView):
             serialized_data = serializer.data
             serialized_data['actual_aggregate'] = actual_aggregate
             KPIS.append(serialized_data)
-        return Response(KPIS)
+        return Response(sorted(KPIS, key=lambda x: x['kpi_name']))
 
 
 class AddActualKPIAPIView(APIView):
