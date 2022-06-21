@@ -5,6 +5,8 @@ from rest_framework import serializers
 class KPISerializer(serializers.Serializer):
     objective = serializers.CharField(max_length=120)
     kpi_name = serializers.CharField(max_length=120)
+    kpi_weight = serializers.FloatField()
+    kpi_target = serializers.FloatField()
     perspective = serializers.CharField(max_length=120)
     kpi_unit_measurement = serializers.CharField(max_length=120)
     Score_January = serializers.FloatField()
@@ -21,17 +23,18 @@ class KPISerializer(serializers.Serializer):
     Score_December = serializers.FloatField()
     aggregate = serializers.FloatField()
 
-class KPIEditSerializer(serializers.ModelSerializer):
+class AddActualKPISerializer(serializers.ModelSerializer):
     class Meta:
         model = KPI
         fields = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-
-class ObjectiveSerializer(serializers.Serializer):
-    perspective = serializers.CharField(max_length=120)
-    objective_name = serializers.CharField(max_length=120)
     
 class AddKPISerializer(serializers.ModelSerializer):
     class Meta:
         model = KPI
-        fields = ['kpi_name', 'kpi_weight', 'kpi_target', 'perspective', 'objective', 'user']
+        fields = ['kpi_name', 'kpi_weight', 'kpi_target', 'perspective', 'objective', 'kpi_unit_measurement', 'user']
+        
+
+class ObjectiveSerializer(serializers.Serializer):
+    perspective = serializers.CharField(max_length=120)
+    objective_name = serializers.CharField(max_length=120)
