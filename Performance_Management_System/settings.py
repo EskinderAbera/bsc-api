@@ -28,6 +28,18 @@ SECRET_KEY = 'django-insecure-xn-1mqst%l+dp5d)$2@8uttysu*7^@rd)uqvt0fao08mic-wo1
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CORS_ALLOW_ALL_ORIGINS: True
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
 
 
 # Application definition
@@ -42,9 +54,11 @@ INSTALLED_APPS = [
     'core',
     'bsc',
     'rest_framework',
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
