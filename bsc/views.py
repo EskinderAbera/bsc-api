@@ -132,7 +132,7 @@ class AddKPIView(APIView):
 
 class EditKPIAPIView(APIView):
    
-    def put(self, request, name, format=None):
+    def post(self, request, name, format=None):
         try:
             kpi = KPI.objects.get(kpi_name=name)
             if kpi:
