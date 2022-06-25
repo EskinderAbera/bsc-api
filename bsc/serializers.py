@@ -23,6 +23,16 @@ class KPISerializer(serializers.Serializer):
     Score_December = serializers.FloatField()
     aggregate = serializers.FloatField()
 
+
+class PlanKPISerializer(serializers.Serializer):
+    kpi_id = serializers.CharField(max_length = 120)
+    perspective = serializers.CharField(max_length=120)
+    objective = serializers.CharField(max_length=120)
+    kpi_name = serializers.CharField(max_length=120)
+    kpi_weight = serializers.FloatField()
+    kpi_target = serializers.FloatField()
+    kpi_unit_measurement = serializers.CharField(max_length=120)
+
 class AddActualKPISerializer(serializers.ModelSerializer):
     class Meta:
         model = KPI

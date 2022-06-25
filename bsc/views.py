@@ -1,6 +1,6 @@
 from core.models import User
 from rest_framework.views import APIView
-from .serializers import KPISerializer, AddActualKPISerializer, AddKPISerializer
+from .serializers import KPISerializer, AddActualKPISerializer, AddKPISerializer, PlanKPISerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import JsonResponse
@@ -21,6 +21,25 @@ class KPIAPIView(APIView):
             KPIS.append(serialized_data)
         return Response(sorted(KPIS, key=lambda x: x['kpi_name']))
 
+
+class GetKPIAPIView(APIView):
+    def get(self, request, format=None):
+        kpis = KPI.objects.all()
+        KPIS = []
+        for kpi in kpis:
+            if kpi.kpi_unit_measurement == "Percentage":
+                kpi.kpi_weight = kpi.kpi_weight * 100
+                kpi.kpi_target = kpi.kpi_target * 100
+                serializer = PlanKPISerializer(kpi)
+                serialized_data = serializer.data
+                KPIS.append(serialized_data)
+            else:
+                kpi.kpi_weight = kpi.kpi_weight * 100
+                serializer = PlanKPISerializer(kpi)
+                serialized_data = serializer.data
+                KPIS.append(serialized_data)
+        return Response(sorted(KPIS, key=lambda x: x['kpi_name']))
+        
 
 class AddActualKPIAPIView(APIView):
 
