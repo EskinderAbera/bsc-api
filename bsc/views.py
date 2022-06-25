@@ -29,12 +29,13 @@ class GetKPIAPIView(APIView):
         for kpi in kpis:
             if kpi.kpi_unit_measurement == "Percentage":
                 kpi.kpi_weight = kpi.kpi_weight * 100
-                kpi.kpi_target = kpi.kpi_target * 100
+                kpi.kpi_target = round(kpi.kpi_target * 100, 2)
                 serializer = PlanKPISerializer(kpi)
                 serialized_data = serializer.data
                 KPIS.append(serialized_data)
             else:
                 kpi.kpi_weight = kpi.kpi_weight * 100
+                kpi.kpi_target = round(kpi.kpi_target, 2)
                 serializer = PlanKPISerializer(kpi)
                 serialized_data = serializer.data
                 KPIS.append(serialized_data)
