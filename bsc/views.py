@@ -40,7 +40,7 @@ class GetKPIAPIView(APIView):
                 serialized_data = serializer.data
                 KPIS.append(serialized_data)
         return Response(sorted(KPIS, key=lambda x: x['kpi_name']))
-        
+
 
 class AddActualKPIAPIView(APIView):
 
@@ -50,7 +50,7 @@ class AddActualKPIAPIView(APIView):
         except User.DoesNotExist:
             raise Http404
 
-    def put(self, request, name, format=None):
+    def post(self, request, name, format=None):
         kpi = self.get_object(name)
         serializer = AddActualKPISerializer(kpi, data=request.data)
         if serializer.is_valid():
