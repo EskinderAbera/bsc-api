@@ -29,6 +29,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = ['*']
+CSRF_TRUSTED_ORIGINS = [
+    "https://bsc-planning.herokuapp.com/",
+]
 CORS_ALLOW_HEADERS = [
     "accept",
     "accept-encoding",
