@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-xn-1mqst%l+dp5d)$2@8uttysu*7^@rd)uqvt0fao08mic-wo1
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CORS_ALLOW_ALL_ORIGINS: True
+CORS_ALLOW_ALL_ORIGINS = ['*']
 CORS_ALLOW_HEADERS = [
     "accept",
     "accept-encoding",
@@ -157,3 +157,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 import django_heroku
 django_heroku.settings(locals())
+
+
+
