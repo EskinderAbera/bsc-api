@@ -55,29 +55,29 @@ class AddActualKPIAPIView(APIView):
         serializer = AddActualKPISerializer(kpi, data=request.data)
         if serializer.is_valid():
             if float(request.data.get("January", kpi.January)) != kpi.January and  float(request.data.get("January", kpi.January)) > float(0) and float(kpi.January) > float(0):
-                return Response({"Error": "You have already added Actual Value for January!"})
+                return Response({"Error": "You have already added Actual Value for January!"}, status=status.HTTP_409_CONFLICT)
             elif float(request.data.get("February", kpi.February)) != float(kpi.February) and  float(request.data.get("February")) > float(0) and float(kpi.February) > float(0):
-                return Response({"Error": "You have already added Actual Value for February!"})
+                return Response({"Error": "You have already added Actual Value for February!"}, status=status.HTTP_409_CONFLICT)
             elif float(request.data.get("March", kpi.March)) != float(kpi.March) and  float(request.data.get("March")) > float(0) and float(kpi.March) > float(0):
-                return Response({"Error": "You have already added Actual Value for March!"})
+                return Response({"Error": "You have already added Actual Value for March!"}, status=status.HTTP_409_CONFLICT)
             elif float(request.data.get("April", kpi.April)) != float(kpi.April) and  float(request.data.get("April")) > float(0) and float(kpi.April) > float(0):
-                return Response({"Error": "You have already added Actual Value for April!"})
+                return Response({"Error": "You have already added Actual Value for April!"}, status=status.HTTP_409_CONFLICT)
             elif float(request.data.get("May", kpi.May)) != float(kpi.May) and  float(request.data.get("May")) > float(0) and float(kpi.May) > float(0):
-                return Response({"Error": "You have already added Actual Value for May!"})
+                return Response({"Error": "You have already added Actual Value for May!"}, status=status.HTTP_409_CONFLICT)
             elif float(request.data.get("June", kpi.June)) != float(kpi.June) and  float(request.data.get("June")) > float(0) and float(kpi.June) > float(0):
-                return Response({"Error": "You have already added Actual Value for June!"})
+                return Response({"Error": "You have already added Actual Value for June!"}, status=status.HTTP_409_CONFLICT)
             elif float(request.data.get("July", kpi.July)) != float(kpi.July) and  float(request.data.get("July")) > float(0) and float(kpi.July) > float(0):
-                return Response({"Error": "You have already added Actual Value for July!"})
+                return Response({"Error": "You have already added Actual Value for July!"}, status=status.HTTP_409_CONFLICT)
             elif float(request.data.get("August", kpi.August)) != float(kpi.August) and  float(request.data.get("August")) > float(0) and float(kpi.August) > float(0):
-                return Response({"Error": "You have already added Actual Value for August!"})
+                return Response({"Error": "You have already added Actual Value for August!"}, status=status.HTTP_409_CONFLICT)
             elif float(request.data.get("September", kpi.September)) != float(kpi.September) and  float(request.data.get("September")) > float(0) and float(kpi.September) > float(0):
-                return Response({"Error": "You have already added Actual Value for September!"})
+                return Response({"Error": "You have already added Actual Value for September!"}, status=status.HTTP_409_CONFLICT)
             elif float(request.data.get("October", kpi.October)) != float(kpi.October) and  float(request.data.get("October")) > float(0) and float(kpi.October) > float(0):
-                return Response({"Error": "You have already added Actual Value for October!"})
+                return Response({"Error": "You have already added Actual Value for October!"}, status=status.HTTP_409_CONFLICT)
             elif float(request.data.get("November", kpi.November)) != float(kpi.November) and  float(request.data.get("November")) > float(0) and float(kpi.November) > float(0):
-                return Response({"Error": "You have already added Actual Value for November!"})
+                return Response({"Error": "You have already added Actual Value for November!"}, status=status.HTTP_409_CONFLICT)
             elif float(request.data.get("December", kpi.December)) != float(kpi.December) and  float(request.data.get("December")) > float(0) and float(kpi.December) > float(0):
-                return Response({"Error": "You have already added Actual Value for December!"})
+                return Response({"Error": "You have already added Actual Value for December!"}, status=status.HTTP_409_CONFLICT)
             else:
                 serializer.save()
                 kpi.Score_January = ((kpi.January/kpi.kpi_target)*100) * kpi.kpi_weight
