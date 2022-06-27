@@ -42,7 +42,7 @@ class AddActualKPISerializer(serializers.ModelSerializer):
 class AddKPISerializer(serializers.ModelSerializer):
     class Meta:
         model = KPI
-        fields = ['kpi_name', 'kpi_weight', 'kpi_target', 'perspective', 'objective', 'kpi_unit_measurement', 'user']
+        fields = ['kpi_id','kpi_name', 'kpi_weight', 'kpi_target', 'perspective', 'objective', 'kpi_unit_measurement', 'user']
         
 
 class ObjectiveSerializer(serializers.Serializer):
