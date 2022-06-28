@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 
 class KPISerializer(serializers.Serializer):
+    kpi_id = serializers.CharField(max_length = 120)
     objective = serializers.CharField(max_length=120)
     kpi_name = serializers.CharField(max_length=120)
     kpi_weight = serializers.FloatField()
