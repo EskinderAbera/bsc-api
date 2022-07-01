@@ -7,7 +7,11 @@ from django.http import Http404
 from rest_framework import status
 from .models import *
 from .serializers import *
-from django.contrib.auth.models import update_last_login
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
+from rest_framework_simplejwt.tokens import RefreshToken
 
 # Create your views here.
 
@@ -93,28 +97,45 @@ def role_detail(request, pk):
         return HttpResponse(status=204)
 
 
-class LoginAPIView(APIView):
-    def post(self, request, *args, **kwargs):
-        serializer = LoginSerializers(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            user = serializer.validated_data['user']
-            update_last_login(None, user)
-            return Response({"status": status.HTTP_200_OK, "data": "user"})
-        return Response({"status": status.HTTP_404_NOT_FOUND, "data": serializer.errors})
+class LoginViewSet(ModelViewSet, TokenObtainPairView):
+    serializer_class = LoginSerializers
+    permission_classes = (AllowAny,)
+    http_method_names = ["post"]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
-class RegisterAPIView(APIView):   
-    def get(self, request, format=None):
-        snippets = User.objects.all()
-        serializer = RegisterSerializer(snippets, many=True)
-        return Response(serializer.data)
+class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
+    serializer_class = RegisterSerializer
+    permission_classes = (AllowAny,)
+    http_method_names = ["post"]
 
-    def post(self, request, format=None):
-        serializer = RegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        refresh = RefreshToken.for_user(user)
+        res = {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+        }
+        return Response(
+            {
+                "user": serializer.data,
+                "refresh": res["refresh"],
+                "token": res["access"],
+            },
+            status=status.HTTP_201_CREATED,
+        )
 
 
 class UserDetail(APIView):

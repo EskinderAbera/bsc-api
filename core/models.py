@@ -10,7 +10,7 @@ import uuid
 # Create your models here.
 
 class UserManager(BaseUserManager):
-    def create_user(self, first_name, last_name, email, username, password=None, **kwargs):
+    def create_user(self, first_name, last_name, username, password=None, **kwargs):
         # if not email:
         #     raise ValueError("Users must have an email address")
 
@@ -18,7 +18,6 @@ class UserManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name,
             username=username,
-            email=self.normalize_email(email),
         )
 
         user.set_password(password)
