@@ -1,7 +1,10 @@
-from django.contrib.auth import authenticate
 from rest_framework import serializers
 from .models import *
 from django.utils.translation import gettext_lazy as _
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.settings import api_settings
+from django.contrib.auth.models import update_last_login
+from django.core.exceptions import ObjectDoesNotExist
 
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,35 +17,62 @@ class RoleSerializer(serializers.ModelSerializer):
         model = Role
         fields = ['role_id', 'role_name', 'hierarchy']
 
-class RegisterSerializer(serializers.ModelSerializer):
+
+class UserSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'department', 'role', 'password']
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "username",
+            "is_active",
+            "department",
+            "role"
+        ]
+        read_only_field = ["is_active"]
 
 
-class LoginSerializers(serializers.Serializer):
-    username = serializers.CharField(max_length=255)
+class RegisterSerializer(UserSerializer):
     password = serializers.CharField(
-        label=_("Password"),
-        style={'input_type': 'password'},
-        trim_whitespace=False,
-        max_length=128,
-        write_only=True
+        max_length=128, min_length=8, write_only=True, required=True
     )
+    is_active = serializers.BooleanField(read_only=True)
 
-    def validate(self, data):
-        username = data.get('username')
-        password = data.get('password')
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "password",
+            "username",
+            "is_active"
+        ]
 
-        if username and password:
-            user = authenticate(request=self.context.get('request'),
-                                username=username, password=password)
-            if not user:
-                msg = _('Unable to log in with provided credentials.')
-                raise serializers.ValidationError(msg, code='authorization')
+    def create(self, validated_data):
+        try:
+            user = User.objects.get(
+                username=validated_data["username"])
+        except ObjectDoesNotExist:
+            user = User.objects.create_user(**validated_data)
+            return user
         else:
-            msg = _('Must include "username" and "password".')
-            raise serializers.ValidationError(msg, code='authorization')
+            return user
 
-        data['user'] = user
+
+class LoginSerializers(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        refresh = self.get_token(self.user)
+
+        data["user"] = UserSerializer(self.user).data
+        data["refresh"] = str(refresh)
+        data["access"] = str(refresh.access_token)
+
+        if api_settings.UPDATE_LAST_LOGIN:
+            update_last_login(None, self.user)
+
         return data

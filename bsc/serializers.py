@@ -23,6 +23,19 @@ class KPISerializer(serializers.Serializer):
     Score_November = serializers.FloatField()
     Score_December = serializers.FloatField()
     aggregate = serializers.FloatField()
+    January = serializers.FloatField()
+    February = serializers.FloatField()
+    March = serializers.FloatField()
+    April = serializers.FloatField()
+    May = serializers.FloatField()
+    June = serializers.FloatField()
+    July = serializers.FloatField()
+    August = serializers.FloatField()
+    September = serializers.FloatField()
+    October = serializers.FloatField()
+    November = serializers.FloatField()
+    December = serializers.FloatField()
+    is_active = serializers.BooleanField()
 
 
 class PlanKPISerializer(serializers.Serializer):
