@@ -11,7 +11,7 @@ from django.http import Http404
 
 class KPIAPIView(APIView):   
     def get(self, request, format=None):
-        kpis = KPI.objects.all()
+        kpis = KPI.objects.filter(is_active=True)
         KPIS = []
         for kpi in kpis:
             actual_aggregate = kpi.January + kpi.February + kpi.March + kpi.April + kpi.May + kpi.June + kpi.July + kpi.August + kpi.September +  kpi.October + kpi.November + kpi.December

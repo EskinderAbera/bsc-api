@@ -71,6 +71,7 @@ class KPI(models.Model):
     Score_November = models.FloatField(blank=True, default=0)
     Score_December = models.FloatField(blank=True, default=0)
     aggregate = models.FloatField(blank=True, default=0)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.kpi_name}"
