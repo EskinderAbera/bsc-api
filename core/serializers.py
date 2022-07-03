@@ -1,3 +1,4 @@
+from requests import Response
 from rest_framework import serializers
 from .models import *
 from django.utils.translation import gettext_lazy as _
@@ -5,6 +6,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework import status
 
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,7 +21,6 @@ class RoleSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = User
         fields = [
@@ -48,7 +49,9 @@ class RegisterSerializer(UserSerializer):
             "last_name",
             "password",
             "username",
-            "is_active"
+            "is_active",
+            "department",
+            "role"
         ]
 
     def create(self, validated_data):
@@ -59,15 +62,13 @@ class RegisterSerializer(UserSerializer):
             user = User.objects.create_user(**validated_data)
             return user
         else:
-            return user
+            return Response({"Error": "User already exist!"}, status = status.HTTP_409_CONFLICT)
 
 
 class LoginSerializers(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
-
         refresh = self.get_token(self.user)
-
         data["user"] = UserSerializer(self.user).data
         data["refresh"] = str(refresh)
         data["access"] = str(refresh.access_token)

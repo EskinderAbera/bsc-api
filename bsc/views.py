@@ -18,6 +18,10 @@ class KPIAPIView(APIView):
             serializer = KPISerializer(kpi)
             serialized_data = serializer.data
             serialized_data['actual_aggregate'] = actual_aggregate
+            perspective = Perspective.objects.get(perspective_name = serialized_data['perspective'])
+            objective = Objectives.objects.get(objective_name = serialized_data['objective'])
+            serialized_data['perspective_weight'] = perspective.perspective_weight
+            serialized_data['objective_weight'] = objective.objective_weight
             KPIS.append(serialized_data)
         return Response(sorted(KPIS, key=lambda x: x['kpi_name']))
 
