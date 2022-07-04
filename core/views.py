@@ -145,14 +145,7 @@ class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
             "refresh": str(refresh),
             "access": str(refresh.access_token),
         }
-        return Response(
-            {
-                "user": serialized_data,
-                "refresh": res["refresh"],
-                "token": res["access"],
-            },
-            status=status.HTTP_201_CREATED,
-        )
+        return Response(serialized_data)
 
 
 class UserDetail(APIView):

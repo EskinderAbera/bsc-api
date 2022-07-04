@@ -23,7 +23,7 @@ class KPIAPIView(APIView):
             serialized_data['perspective_weight'] = perspective.perspective_weight
             serialized_data['objective_weight'] = objective.objective_weight
             KPIS.append(serialized_data)
-        return Response(sorted(KPIS, key=lambda x: x['kpi_name']))
+        return Response(sorted(KPIS, key=lambda x: x['perspective']))
 
 
 class GetKPIAPIView(APIView):
