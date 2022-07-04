@@ -1,11 +1,12 @@
-from webbrowser import get
 from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from django.http import Http404
-from rest_framework import status
+
+from bsc.models import Perspective
 from .models import *
 from .serializers import *
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -104,23 +105,19 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
     http_method_names = ["post"]
 
     def create(self, request, *args, **kwargs):
-        # request.data['role'] = role.role_id
-        # request.data['department'] = department.dept_id
+       
         serializer = self.get_serializer(data=request.data)
 
         try:
             serializer.is_valid(raise_exception=True)
         except TokenError as e:
             raise InvalidToken(e.args[0])
-
-        serialized_data = serializer.data
-        # user =  User.objects.get(username = serialized_data['user']['username'])
-        # role = Role.objects.get(role_id = user.role)
-        # department = Department.objects.get(dept_id = user.department)
-        # serialized_data['department'] = department.dept_name
-        # serialized_data['role'] = role.role_name
-        # print(serialized_data['user']['username'])
-        return Response(serialized_data, status=status.HTTP_200_OK)
+        serialized_data = serializer.validated_data
+        department = Department.objects.get(dept_id = serialized_data['user']['department'])
+        role = Role.objects.get(role_id = serialized_data['user']['role'])
+        serialized_data['user']['department'] = department.dept_name
+        serialized_data['user']['role'] = role.role_name
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
 class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
@@ -129,23 +126,30 @@ class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
     http_method_names = ["post"]
 
     def create(self, request, *args, **kwargs):
-        role = Role.objects.get(role_name = request.data.get("role", ""))
-        department = Department.objects.get(dept_name = request.data.get("department", ""))
-        request.data['role'] = role.role_id
+        department = Department.objects.get(dept_name = request.data.get("department"))
+        role = Role.objects.get(role_name = request.data.get("role"))
         request.data['department'] = department.dept_id
+        request.data['role'] = role.role_id
         serializer = self.get_serializer(data=request.data)
 
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        serialized_data = serializer.data
-        serialized_data['role'] = role.role_name
-        serialized_data['department'] = department.dept_name
         refresh = RefreshToken.for_user(user)
         res = {
             "refresh": str(refresh),
             "access": str(refresh.access_token),
         }
-        return Response(serialized_data)
+        serialized_data = serializer.data
+        serialized_data['department'] = department.dept_name
+        serialized_data['role'] = role.role_name
+        return Response(
+            {
+                "user": serialized_data,
+                "refresh": res["refresh"],
+                "token": res["access"],
+            },
+            status=status.HTTP_201_CREATED,
+        )
 
 
 class UserDetail(APIView):

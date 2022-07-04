@@ -1,4 +1,4 @@
-from requests import Response
+from rest_framework.response import Response
 from rest_framework import serializers
 from .models import *
 from django.utils.translation import gettext_lazy as _
@@ -40,6 +40,7 @@ class RegisterSerializer(UserSerializer):
         max_length=128, min_length=8, write_only=True, required=True
     )
     is_active = serializers.BooleanField(read_only=True)
+    username = serializers.CharField(required=True, max_length=128)
 
     class Meta:
         model = User
@@ -62,13 +63,15 @@ class RegisterSerializer(UserSerializer):
             user = User.objects.create_user(**validated_data)
             return user
         else:
-            return Response({"Error": "User already exist!"}, status = status.HTTP_409_CONFLICT)
+            return user
 
 
 class LoginSerializers(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
+
         refresh = self.get_token(self.user)
+
         data["user"] = UserSerializer(self.user).data
         data["refresh"] = str(refresh)
         data["access"] = str(refresh.access_token)
