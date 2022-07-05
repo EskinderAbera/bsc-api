@@ -28,7 +28,7 @@ urlpatterns = [
     path('hc/', include('hc.urls')),
     path('ifb/', include('ifb.urls')),
     path('internal/', include('internal.urls')),
-    path('is/', include('is.urls')),
+    path('is/', include('IS.urls')),
     path('legal/', include('legal.urls')),
     path('operation/', include('operation.urls')),
     path('risk/', include('risk.urls')),

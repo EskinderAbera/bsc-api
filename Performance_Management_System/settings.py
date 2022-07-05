@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'hc',
     'internal',
     'ifb',
-    'is',
+    'IS',
     'legal',
     'bod',
     'risk',

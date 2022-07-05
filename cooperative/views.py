@@ -56,6 +56,31 @@ class AddActualKPIAPIView(APIView):
 
     def post(self, request, name, format=None):
         kpi = self.get_object(name)
+        if kpi.kpi_unit_measurement == "Percentage":
+            if request.data.get("January"):
+               request.data["January"] = float(request.data.get("January"))/100
+            elif request.data.get("February"):
+                request.data["February"] = float(request.data.get("February"))/100
+            elif request.data.get("March"):
+                request.data["March"] = float(request.data.get("March"))/100
+            elif request.data.get("April"):
+                request.data["April"] = float(request.data.get("April"))/100
+            elif request.data.get("May"):
+                request.data["May"] = float(request.data.get("May"))/100
+            elif request.data.get("June"):
+                request.data["June"] = float(request.data.get("June"))/100
+            elif request.data.get("July"):
+                request.data["July"] = float(request.data.get("July"))/100
+            elif request.data.get("August"):
+                request.data["August"] = float(request.data.get("August"))/100
+            elif request.data.get("September"):
+                request.data["September"] = float(request.data.get("September"))/100
+            elif request.data.get("October"):
+                request.data["October"] = float(request.data.get("October"))/100
+            elif request.data.get("November"):
+                request.data["November"] = float(request.data.get("November"))/100
+            elif request.data.get("December"):
+                request.data["December"] = float(request.data.get("December"))/100
         serializer = AddActualKPISerializer(kpi, data=request.data)
         if serializer.is_valid():
             if float(request.data.get("January", kpi.January)) != kpi.January and  float(request.data.get("January", kpi.January)) > float(0) and float(kpi.January) > float(0):

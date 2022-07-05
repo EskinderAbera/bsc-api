@@ -12,6 +12,20 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+# from bod.models import KPI
+# from cooperative.models import KPI
+# from corporate.models import KPI
+# from credit.models import KPI
+# from finance.models import KPI
+# from hc.models import KPI
+# from ifb.models import KPI
+# from internal.models import KPI
+# from IS.models import KPI
+# from legal.models import KPI
+# from operation.models import KPI
+# from risk.models import KPI
+# from strategy.models import KPI
+# from tech.models import KPI
 
 # Create your views here.
 
@@ -110,11 +124,45 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
         except TokenError as e:
             raise InvalidToken(e.args[0])
         serialized_data = serializer.validated_data
-        role = Role.objects.get(role_id = serialized_data['user']['role'])
-        department = Department.objects.get(dept_id = serialized_data['user']['department'])
-        serialized_data['user']['role'] = role.role_name
-        serialized_data['user']['department'] = department.dept_name
-        return Response(serialized_data, status=status.HTTP_200_OK)
+        user = User.objects.get(id = serialized_data['user']['id'])
+        if(user.dept_name == "Banking Operation Process"):
+            kpis = user.bod_user.all()
+        elif (user.dept_name == "Corporate Banking Process"):
+            kpis = user.corporate_user.all()
+        elif(user.dept_name == "Cooperative Banking"):
+            kpis = user.cooperative_user.all()
+        elif(user.dept_name == "Credit Appraisal"):
+            kpis = user.credit_user.all()
+        elif(user.dept_name == "Finance and Facility Process"):
+            kpis = user.finance_user.all()
+        elif(user.dept_name == "HC and Projects Management"):
+            kpis = user.hc_user.all()
+        elif(user.dept_name == "Internal Audit Process"):
+            kpis = user.internal_user.all()
+        elif(user.dept_name == "IFB Process"):
+            kpis = user.ifb_user.all()
+        elif(user.dept_name == "IS Process"):
+            kpis = user.is_user.all()
+        elif(user.dept_name == "Legal Services"):
+            kpis = user.legal_user.all()
+        elif(user.dept_name == "BOD Secretary"):
+            kpis = user.bod_user.all()
+        elif(user.dept_name == "Risk and Compliance"):
+            kpis = user.risk_user.all()
+        elif(user.dept_name == "Strategy and Marketing"):
+            kpis = user.strategy_user.all()
+        elif(user.dept_name == "Tech and Digital Banking Process"):
+            kpis = user.tech_user.all()
+        KPIS = []
+        for kpi in kpis:
+            actual_aggregate = kpi.January + kpi.February + kpi.March + kpi.April + kpi.May + kpi.June + kpi.July + kpi.August + kpi.September +  kpi.October + kpi.November + kpi.December
+            serializer = KPISerializer(kpi)
+            serialized_data = serializer.data
+            serialized_data['actual_aggregate'] = actual_aggregate
+            serialized_data['perspective_weight'] = kpi.perspective.perspective_weight
+            serialized_data['objective_weight'] = kpi.objective.objective_weight
+            KPIS.append(serialized_data)
+        return Response(sorted(KPIS, key=lambda x: x['perspective']), status=status.HTTP_200_OK) 
 
 
 class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
@@ -173,3 +221,15 @@ class UserDetail(APIView):
         user = self.get_object(pk)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class UserGroup(APIView):
+    def get_object(self):
+        try:
+            return User.objects.all()
+        except User.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        user = self.get_object(pk)
+        serializer = RegisterSerializer(user)
+        return Response(serializer.data)
