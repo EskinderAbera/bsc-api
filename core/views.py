@@ -142,7 +142,7 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
         elif(user.dept_name == "IFB Process"):
             kpis = user.ifb_user.all()
         elif(user.dept_name == "IS Process"):
-            kpis = user.is_user.all()
+            kpis = user.information_system_user.all()
         elif(user.dept_name == "Legal Services"):
             kpis = user.legal_user.all()
         elif(user.dept_name == "BOD Secretary"):
