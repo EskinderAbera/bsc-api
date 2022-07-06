@@ -125,33 +125,33 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
             raise InvalidToken(e.args[0])
         serialized_data = serializer.validated_data
         user = User.objects.get(id = serialized_data['user']['id'])
-        if(user.dept_name == "Banking Operation Process"):
+        if(user.department.dept_name == "Banking Operations Scorecard"):
             kpis = user.bod_user.all()
-        elif (user.dept_name == "Corporate Banking Process"):
+        elif (user.department.dept_name == "Corporate Banking Process"):
             kpis = user.corporate_user.all()
-        elif(user.dept_name == "Cooperative Banking"):
+        elif(user.department.dept_name == "Cooperative Banking Process"):
             kpis = user.cooperative_user.all()
-        elif(user.dept_name == "Credit Appraisal"):
+        elif(user.department.dept_name == "Credit Appraisal and Portfolio Management"):
             kpis = user.credit_user.all()
-        elif(user.dept_name == "Finance and Facility Process"):
+        elif(user.department.dept_name == "Finance and Facilities Management Scorecard"):
             kpis = user.finance_user.all()
-        elif(user.dept_name == "HC and Projects Management"):
+        elif(user.department.dept_name == "Human Capital and Projects Management Scorecard"):
             kpis = user.hc_user.all()
-        elif(user.dept_name == "Internal Audit Process"):
+        elif(user.department.dept_name == "Internal Audit Process"):
             kpis = user.internal_user.all()
-        elif(user.dept_name == "IFB Process"):
+        elif(user.department.dept_name == "Interest Free Banking Process"):
             kpis = user.ifb_user.all()
-        elif(user.dept_name == "IS Process"):
+        elif(user.department.dept_name == "Information System"):
             kpis = user.information_system_user.all()
-        elif(user.dept_name == "Legal Services"):
+        elif(user.department.dept_name == "Legal Services"):
             kpis = user.legal_user.all()
-        elif(user.dept_name == "BOD Secretary"):
+        elif(user.department.dept_name == "Board of Director Secretary"):
             kpis = user.bod_user.all()
-        elif(user.dept_name == "Risk and Compliance"):
+        elif(user.department.dept_name == "Risk and Compliance Management Process"):
             kpis = user.risk_user.all()
-        elif(user.dept_name == "Strategy and Marketing"):
+        elif(user.department.dept_name == "Strategy and Marketing"):
             kpis = user.strategy_user.all()
-        elif(user.dept_name == "Tech and Digital Banking Process"):
+        elif(user.department.dept_name == "Tech and Digital Banking Process"):
             kpis = user.tech_user.all()
         KPIS = []
         for kpi in kpis:

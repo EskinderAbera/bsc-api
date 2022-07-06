@@ -139,7 +139,7 @@ class AddKPIView(APIView):
             request.data['perspective'] = perspective.perspective_id
             objective = Objectives.objects.get(objective_name = request.data.get("objective", ""))
             request.data['objective'] = objective.objective_id
-            user = User.objects.get(username = "admin")
+            user = User.objects.get(username = request.data.get("user"))
             request.data['user'] = user.id
             serializer = AddKPISerializer(data=request.data)
             if serializer.is_valid():
