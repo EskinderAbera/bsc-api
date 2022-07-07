@@ -125,6 +125,8 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
             raise InvalidToken(e.args[0])
         serialized_data = serializer.validated_data
         user = User.objects.get(id = serialized_data['user']['id'])
+        if(user.department.dept_name == "admin"):
+            kpis = user.ceo_user.all()
         if(user.department.dept_name == "Banking Operations Scorecard"):
             kpis = user.bod_user.all()
         elif (user.department.dept_name == "Corporate Banking Process"):
