@@ -12,6 +12,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
 # from bod.models import KPI
 # from cooperative.models import KPI
 # from corporate.models import KPI
@@ -229,8 +230,11 @@ class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
 
 class OtherLogin(APIView):
     def post(self, request, format=None):
-        user = User.objects.filter(username = request.data.get("username"), password = request.data.get("password"))
+        user = User.objects.get(username = request.data.get("username"))
         if user:
+            username = request.data.get("username")
+            password = request.data.get("password")
+            authenticate(username=username, password=password)
             return Response({"Success"}, status=status.HTTP_200_OK)
         else:
             return Response({"Error":"User Does Not Exist!"}, status=status.HTTP_404_NOT_FOUND)
