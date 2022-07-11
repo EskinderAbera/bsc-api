@@ -227,6 +227,15 @@ class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
         )
 
 
+class OtherLogin(APIView):
+    def post(self, request, format=None):
+        user = User.objects.filter(username = request.data.get("username"), password = request.data.get("password"))
+        if user:
+            return Response({"Success"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"Error":"User Does Not Exist!"}, status=status.HTTP_404_NOT_FOUND)
+
+
 class UserDetail(APIView):
 
     def get_object(self, pk):

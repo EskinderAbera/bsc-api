@@ -27,8 +27,7 @@ class Objectives(models.Model):
 class KPI(models.Model):
     kpi_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     kpi_name = models.CharField(max_length=120, blank=False)
-    kpi_target = models.FloatField(blank=True, default=0)
-    kpi_weight = models.FloatField(blank=True, default=0)
+    kpi_weight = models.FloatField(blank=False)
 
     class Types(models.TextChoices):
         Percentage = "Percentage", "Percentage"
@@ -42,9 +41,10 @@ class KPI(models.Model):
     kpi_unit_measurement = models.CharField(
         _("kpi_unit_measurement"), max_length=50, choices=Types.choices, default=default_kpi_unit_measurement
     )
+    kpi_target = models.FloatField(blank=True)
     perspective = models.ForeignKey(Perspective, on_delete=models.CASCADE)
     objective = models.ForeignKey(Objectives, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ceo_user')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='is_user')
     January = models.FloatField(blank=True, default=0)
     February = models.FloatField(blank=True, default=0)
     March = models.FloatField(blank=True, default=0)

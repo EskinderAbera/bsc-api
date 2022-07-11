@@ -17,5 +17,6 @@ urlpatterns = [
     path('role/', role_list),
     path('role_detail/<str:pk>/', role_detail),
     path('auth/user/<str:pk>/', UserDetail.as_view()),
+    path('other/login/', OtherLogin.as_view())
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)
