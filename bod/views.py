@@ -17,7 +17,33 @@ class KPIAPIView(APIView):
             actual_aggregate = kpi.January + kpi.February + kpi.March + kpi.April + kpi.May + kpi.June + kpi.July + kpi.August + kpi.September +  kpi.October + kpi.November + kpi.December
             serializer = KPISerializer(kpi)
             serialized_data = serializer.data
+            numberOfmonthsLeft = 0
+            if(kpi.January<=0):
+                numberOfmonthsLeft=numberOfmonthsLeft + 1
+            if(kpi.February<=0):
+                numberOfmonthsLeft=numberOfmonthsLeft + 1
+            if(kpi.March<=0):
+                numberOfmonthsLeft=numberOfmonthsLeft + 1
+            if(kpi.April<=0):
+                numberOfmonthsLeft=numberOfmonthsLeft + 1
+            if(kpi.May<=0):
+                numberOfmonthsLeft=numberOfmonthsLeft + 1
+            if(kpi.June<=0):
+                numberOfmonthsLeft=numberOfmonthsLeft + 1
+            if(kpi.July<=0):
+                numberOfmonthsLeft=numberOfmonthsLeft + 1
+            if(kpi.August<=0):
+                numberOfmonthsLeft=numberOfmonthsLeft + 1
+            if(kpi.September<=0):
+                numberOfmonthsLeft=numberOfmonthsLeft + 1
+            if(kpi.October<=0):
+                numberOfmonthsLeft=numberOfmonthsLeft + 1
+            if(kpi.November<=0):
+                numberOfmonthsLeft=numberOfmonthsLeft + 1
+            if(kpi.December<=0):
+                numberOfmonthsLeft=numberOfmonthsLeft + 1
             serialized_data['actual_aggregate'] = actual_aggregate
+            serialized_data['numberOfmonthsLeft'] = numberOfmonthsLeft
             perspective = Perspective.objects.get(perspective_name = serialized_data['perspective'])
             objective = Objectives.objects.get(objective_name = serialized_data['objective'])
             serialized_data['perspective_weight'] = perspective.perspective_weight
