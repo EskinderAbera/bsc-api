@@ -159,32 +159,33 @@ class AddKPIView(APIView):
         try:
             kpi = KPI.objects.get(kpi_name = request.data.get("kpi_name"))
             if kpi:
-                return Response({"Error": "KPI already exist!"}, status=status.HTTP_409_CONFLICT)
-        except KPI.DoesNotExist:
-            perspective = Perspective.objects.get(perspective_name = request.data.get("perspective", ""))
-            request.data['perspective'] = perspective.perspective_id
-            objective = Objectives.objects.get(objective_name = request.data.get("objective", ""))
-            request.data['objective'] = objective.objective_id
-            user = User.objects.get(username = "admin")
-            request.data['user'] = user.id
-            serializer = AddKPISerializer(data=request.data)
-            if serializer.is_valid():
-                if serializer.validated_data['kpi_unit_measurement'] == "Percentage":
-                    serializer.validated_data['kpi_weight'] = float(serializer.validated_data['kpi_weight'])/100
-                    serializer.validated_data['kpi_target'] = float(serializer.validated_data['kpi_target'])/100
-                    serializer.save()
-                    serialized_data = serializer.data
-                    serialized_data['perspective'] = perspective.perspective_name
-                    serialized_data['objective'] = objective.objective_name
+                perspective = Perspective.objects.get(perspective_name = request.data.get("perspective", ""))
+                request.data['perspective'] = perspective.perspective_id
+                objective = Objectives.objects.get(objective_name = request.data.get("objective", ""))
+                request.data['objective'] = objective.objective_id
+                user = User.objects.get(username = "admin")
+                request.data['user'] = user.id
+                serializer = AddKPISerializer(data=request.data)
+                if serializer.is_valid():
+                    if serializer.validated_data['kpi_unit_measurement'] == "Percentage":
+                        serializer.validated_data['kpi_weight'] = float(serializer.validated_data['kpi_weight'])/100
+                        serializer.validated_data['kpi_target'] = float(serializer.validated_data['kpi_target'])/100
+                        serializer.save()
+                        serialized_data = serializer.data
+                        serialized_data['perspective'] = perspective.perspective_name
+                        serialized_data['objective'] = objective.objective_name
+                        return Response(serialized_data, status=status.HTTP_201_CREATED)
+                    elif serializer.validated_data['kpi_unit_measurement'] == "ETB" or serializer.validated_data['kpi_unit_measurement'] == "USD" or serializer.validated_data['kpi_unit_measurement'] =="Numbers":
+                        serializer.validated_data['kpi_weight'] = float(serializer.validated_data['kpi_weight'])/100
+                        serializer.save()
+                        serialized_data = serializer.data
+                        serialized_data['perspective'] = perspective.perspective_name
+                        serialized_data['objective'] = objective.objective_name
                     return Response(serialized_data, status=status.HTTP_201_CREATED)
-                elif serializer.validated_data['kpi_unit_measurement'] == "ETB" or serializer.validated_data['kpi_unit_measurement'] == "USD" or serializer.validated_data['kpi_unit_measurement'] =="Numbers":
-                    serializer.validated_data['kpi_weight'] = float(serializer.validated_data['kpi_weight'])/100
-                    serializer.save()
-                    serialized_data = serializer.data
-                    serialized_data['perspective'] = perspective.perspective_name
-                    serialized_data['objective'] = objective.objective_name
-                return Response(serialized_data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except KPI.DoesNotExist:
+            return Response({"Error": "KPI does not exist!"}, status=status.HTTP_409_CONFLICT)
+            
 
 class EditKPIAPIView(APIView):
    
