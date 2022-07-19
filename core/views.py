@@ -129,7 +129,7 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
         if(user.department.dept_name == "admin"):
             kpis = user.ceo_user.all()
         if(user.department.dept_name == "Banking Operations Scorecard"):
-            kpis = user.bod_user.all()
+            kpis = user.operation_user.all()
         elif (user.department.dept_name == "Corporate Banking Process"):
             kpis = user.corporate_user.all()
         elif(user.department.dept_name == "Cooperative Banking Process"):
