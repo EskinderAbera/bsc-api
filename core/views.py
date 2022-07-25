@@ -153,7 +153,7 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
         elif(user.department.dept_name == "Risk and Compliance Management Process"):
             kpis = user.risk_user.all()
         elif(user.department.dept_name == "Strategy and Marketing"):
-            kpis = user.strategy_user.all()
+            kpis = user.strategy_name.all()
         elif(user.department.dept_name == "Tech and Digital Banking Process"):
             kpis = user.tech_user.all()
         KPIS = []
