@@ -44,7 +44,7 @@ class KPI(models.Model):
     )
     perspective = models.ForeignKey(Perspective, on_delete=models.CASCADE)
     objective = models.ForeignKey(Objectives, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='strategy_name')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='strategy_user')
     January = models.FloatField(blank=True, default=0)
     February = models.FloatField(blank=True, default=0)
     March = models.FloatField(blank=True, default=0)
