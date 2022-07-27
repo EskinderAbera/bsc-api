@@ -1,3 +1,4 @@
+from unicodedata import name
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import (
@@ -10,7 +11,7 @@ import uuid
 # Create your models here.
 
 class UserManager(BaseUserManager):
-    def create_user(self, first_name, last_name, department, role, username, password=None, **kwargs):
+    def create_user(self, first_name, last_name, department, role, subdepartment, username, password=None, **kwargs):
         # if not email:
         #     raise ValueError("Users must have an email address")
 
@@ -19,7 +20,8 @@ class UserManager(BaseUserManager):
             last_name=last_name,
             username=username,
             department = department,
-            role = role
+            role = role,
+            subdepartment= subdepartment
         )
 
         user.set_password(password)
@@ -59,6 +61,14 @@ class Role(models.Model):
         return f"{self.role_name}"
 
 
+class SubDepartment(models.Model):
+    name = models.CharField(max_length=128, blank=False)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=50, blank=False, unique=True)
@@ -74,6 +84,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, blank=True, null=True)
     role = models.ForeignKey(Role, on_delete=models.CASCADE, blank=True, null=True)
+    subdepartment = models.ForeignKey(SubDepartment, on_delete=models.CASCADE, blank=True, null=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
