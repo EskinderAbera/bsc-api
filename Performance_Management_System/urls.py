@@ -34,4 +34,5 @@ urlpatterns = [
     path('risk/', include('risk.urls')),
     path('strategy/', include('strategy.urls')),
     path('tech/', include('tech.urls')),
+    path('director/', include('director.urls'))
 ]

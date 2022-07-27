@@ -66,7 +66,8 @@ INSTALLED_APPS = [
     'bod',
     'risk',
     'strategy',
-    'tech'
+    'tech',
+    'director',
 ]
 
 MIDDLEWARE = [

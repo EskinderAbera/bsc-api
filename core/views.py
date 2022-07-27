@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -126,36 +127,38 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
             raise InvalidToken(e.args[0])
         serialized_data = serializer.validated_data
         user = User.objects.get(id = serialized_data['user']['id'])
-        if(user.department.dept_name == "admin"):
+        if(user.department.dept_name == "admin" and user.subdepartment == NULL):
             kpis = user.ceo_user.all()
-        if(user.department.dept_name == "Banking Operations Scorecard"):
+        if(user.department.dept_name == "Banking Operations Scorecard" and user.subdepartment == NULL):
             kpis = user.operation_user.all()
-        elif (user.department.dept_name == "Corporate Banking Process"):
+        elif (user.department.dept_name == "Corporate Banking Process" and user.subdepartment == NULL):
             kpis = user.corporate_user.all()
-        elif(user.department.dept_name == "Cooperative Banking Process"):
+        elif(user.department.dept_name == "Cooperative Banking Process" and user.subdepartment == NULL):
             kpis = user.cooperative_user.all()
-        elif(user.department.dept_name == "Credit Appraisal and Portfolio Management"):
+        elif(user.department.dept_name == "Credit Appraisal and Portfolio Management" and user.subdepartment == NULL):
             kpis = user.credit_user.all()
-        elif(user.department.dept_name == "Finance and Facilities Management Scorecard"):
+        elif(user.department.dept_name == "Finance and Facilities Management Scorecard" and user.subdepartment == NULL):
             kpis = user.finance_user.all()
-        elif(user.department.dept_name == "Human Capital and Projects Management Scorecard"):
+        elif(user.department.dept_name == "Human Capital and Projects Management Scorecard" and user.subdepartment == NULL):
             kpis = user.hc_user.all()
-        elif(user.department.dept_name == "Internal Audit Process"):
+        elif(user.department.dept_name == "Internal Audit Process" and user.subdepartment == NULL):
             kpis = user.internal_user.all()
-        elif(user.department.dept_name == "Interest Free Banking Process"):
+        elif(user.department.dept_name == "Interest Free Banking Process" and user.subdepartment == NULL):
             kpis = user.ifb_user.all()
-        elif(user.department.dept_name == "Information System"):
+        elif(user.department.dept_name == "Information System" and user.subdepartment == NULL):
             kpis = user.information_system_user.all()
-        elif(user.department.dept_name == "Legal Services"):
+        elif(user.department.dept_name == "Legal Services" and user.subdepartment == NULL):
             kpis = user.legal_user.all()
-        elif(user.department.dept_name == "Board of Director Secretary"):
+        elif(user.department.dept_name == "Board of Director Secretary" and user.subdepartment == NULL):
             kpis = user.bod_user.all()
-        elif(user.department.dept_name == "Risk and Compliance Management Process"):
+        elif(user.department.dept_name == "Risk and Compliance Management Process" and user.subdepartment == NULL):
             kpis = user.risk_user.all()
-        elif(user.department.dept_name == "Strategy and Marketing"):
+        elif(user.department.dept_name == "Strategy and Marketing" and user.subdepartment == NULL):
             kpis = user.strategy_user.all()
-        elif(user.department.dept_name == "Tech and Digital Banking Process"):
+        elif(user.department.dept_name == "Tech and Digital Banking Process" and user.subdepartment == NULL):
             kpis = user.tech_user.all()
+        else:
+            kpis = user.director_user.all()
         KPIS = []
         for kpi in kpis:
             actual_aggregate = kpi.January + kpi.February + kpi.March + kpi.April + kpi.May + kpi.June + kpi.July + kpi.August + kpi.September +  kpi.October + kpi.November + kpi.December
@@ -205,8 +208,10 @@ class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
     def create(self, request, *args, **kwargs):
         role = Role.objects.get(role_name = request.data.get("role"))
         department = Department.objects.get(dept_name = request.data.get("department"))
+        subdepartment = SubDepartment.objects.get(name = request.data.get("subdepartment"))
         request.data['department'] = department.dept_id
         request.data['role'] = role.role_id
+        request.data['subdepartment'] = subdepartment.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -218,6 +223,8 @@ class RegistrationViewSet(ModelViewSet, TokenObtainPairView):
         serialized_data = serializer.data
         serialized_data['role'] = role.role_name
         serialized_data['department'] = department.dept_name
+        serialized_data['subdepartment'] = subdepartment.name
+
         return Response(
             {
                 "user": serialized_data,
