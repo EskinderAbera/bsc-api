@@ -13,20 +13,6 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
-# from bod.models import KPI
-# from cooperative.models import KPI
-# from corporate.models import KPI
-# from credit.models import KPI
-# from finance.models import KPI
-# from hc.models import KPI
-# from ifb.models import KPI
-# from internal.models import KPI
-# from IS.models import KPI
-# from legal.models import KPI
-# from operation.models import KPI
-# from risk.models import KPI
-# from strategy.models import KPI
-# from tech.models import KPI
 
 # Create your views here.
 
@@ -126,35 +112,35 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
             raise InvalidToken(e.args[0])
         serialized_data = serializer.validated_data
         user = User.objects.get(id = serialized_data['user']['id'])
-        if(user.department.dept_name == "admin" and user.subdepartment == NULL):
+        if(user.department.dept_name == "admin" and user.subdepartment == None):
             kpis = user.ceo_user.all()
-        if(user.department.dept_name == "Banking Operations Scorecard" and user.subdepartment == NULL):
+        if(user.department.dept_name == "Banking Operations Scorecard" and user.subdepartment == None):
             kpis = user.operation_user.all()
-        elif (user.department.dept_name == "Corporate Banking Process" and user.subdepartment == NULL):
+        elif (user.department.dept_name == "Corporate Banking Process" and user.subdepartment == None):
             kpis = user.corporate_user.all()
-        elif(user.department.dept_name == "Cooperative Banking Process" and user.subdepartment == NULL):
+        elif(user.department.dept_name == "Cooperative Banking Process" and user.subdepartment == None):
             kpis = user.cooperative_user.all()
-        elif(user.department.dept_name == "Credit Appraisal and Portfolio Management" and user.subdepartment == NULL):
+        elif(user.department.dept_name == "Credit Appraisal and Portfolio Management" and user.subdepartment == None):
             kpis = user.credit_user.all()
-        elif(user.department.dept_name == "Finance and Facilities Management Scorecard" and user.subdepartment == NULL):
+        elif(user.department.dept_name == "Finance and Facilities Management Scorecard" and user.subdepartment == None):
             kpis = user.finance_user.all()
-        elif(user.department.dept_name == "Human Capital and Projects Management Scorecard" and user.subdepartment == NULL):
+        elif(user.department.dept_name == "Human Capital and Projects Management Scorecard" and user.subdepartment == None):
             kpis = user.hc_user.all()
-        elif(user.department.dept_name == "Internal Audit Process" and user.subdepartment == NULL):
+        elif(user.department.dept_name == "Internal Audit Process" and user.subdepartment == None):
             kpis = user.internal_user.all()
-        elif(user.department.dept_name == "Interest Free Banking Process" and user.subdepartment == NULL):
+        elif(user.department.dept_name == "Interest Free Banking Process" and user.subdepartment == None):
             kpis = user.ifb_user.all()
-        elif(user.department.dept_name == "Information System" and user.subdepartment == NULL):
+        elif(user.department.dept_name == "Information System" and user.subdepartment == None):
             kpis = user.information_system_user.all()
-        elif(user.department.dept_name == "Legal Services" and user.subdepartment == NULL):
+        elif(user.department.dept_name == "Legal Services" and user.subdepartment == None):
             kpis = user.legal_user.all()
-        elif(user.department.dept_name == "Board of Director Secretary" and user.subdepartment == NULL):
+        elif(user.department.dept_name == "Board of Director Secretary" and user.subdepartment == None):
             kpis = user.bod_user.all()
-        elif(user.department.dept_name == "Risk and Compliance Management Process" and user.subdepartment == NULL):
+        elif(user.department.dept_name == "Risk and Compliance Management Process" and user.subdepartment == None):
             kpis = user.risk_user.all()
-        elif(user.department.dept_name == "Strategy and Marketing" and user.subdepartment == NULL):
+        elif(user.department.dept_name == "Strategy and Marketing" and user.subdepartment == None):
             kpis = user.strategy_user.all()
-        elif(user.department.dept_name == "Tech and Digital Banking Process" and user.subdepartment == NULL):
+        elif(user.department.dept_name == "Tech and Digital Banking Process" and user.subdepartment == None):
             kpis = user.tech_user.all()
         else:
             kpis = user.director_user.all()
