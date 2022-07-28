@@ -3,7 +3,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from .views import *
 
 urlpatterns = [
-    path('kpi/', KPIAPIView.as_view()),
+    path('kpi/<str:subdepartment>/', KPIAPIView.as_view()),
     path('objective/', ObjectiveAPI.as_view()),
     path('add/actual/kpi/<str:name>/', AddActualKPIAPIView.as_view()),
     path('add/kpi/', AddKPIView.as_view()),

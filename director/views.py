@@ -1,4 +1,5 @@
-from core.models import User
+from unicodedata import name
+from core.models import User, SubDepartment
 from rest_framework.views import APIView
 from .serializers import KPISerializer, AddActualKPISerializer, AddKPISerializer, PlanKPISerializer
 from rest_framework.response import Response
@@ -10,8 +11,10 @@ from django.http import Http404
 # Create your views here.
 
 class KPIAPIView(APIView):   
-    def get(self, request, format=None):
-        kpis = KPI.objects.filter(is_active=True)
+    def get(self, request, subdepartment, format=None):
+        dept = SubDepartment.objects.get(name = subdepartment)
+        user = User.objects.get(subdepartment=dept.id)
+        kpis = user.director_user.all()
         KPIS = []
         for kpi in kpis:
             actual_aggregate = kpi.January + kpi.February + kpi.March + kpi.April + kpi.May + kpi.June + kpi.July + kpi.August + kpi.September +  kpi.October + kpi.November + kpi.December
