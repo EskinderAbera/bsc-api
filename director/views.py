@@ -1,6 +1,6 @@
 from core.models import User, SubDepartment
 from rest_framework.views import APIView
-from .serializers import KPISerializer, AddActualKPISerializer, AddKPISerializer, PlanKPISerializer
+from .serializers import KPISerializer, AddActualKPISerializer, AddKPISerializer, PlanKPISerializer, PerspectiveSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import JsonResponse
@@ -257,3 +257,11 @@ class ObjectiveAPI(APIView):
                                           }}          
                 ]
         return Response(data=dicti)
+
+
+class PerspectiveAPI(APIView):
+    def get(self, request, format=None):
+        kpis = Perspective.objects.all()
+        serializer = PerspectiveSerializer(kpis, many=True)
+    
+        return Response(serializer.data)
