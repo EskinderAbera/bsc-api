@@ -2,6 +2,7 @@ from django.db import models
 from core.models import User
 from django.utils.translation import gettext_lazy as _
 import uuid
+from core.models import User
 
 # Create your models here.
 
@@ -9,6 +10,7 @@ class Perspective(models.Model):
     perspective_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     perspective_name = models.CharField(max_length=120, blank=False)
     perspective_weight = models.FloatField(blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f"{self.perspective_name}"
@@ -19,6 +21,7 @@ class Objectives(models.Model):
     objective_name = models.CharField(max_length=120, blank=False)
     objective_weight = models.FloatField(blank=False)
     perspective = models.ForeignKey(Perspective, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f"{self.objective_name}"

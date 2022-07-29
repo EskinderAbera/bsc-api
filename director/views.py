@@ -1,4 +1,3 @@
-from unicodedata import name
 from core.models import User, SubDepartment
 from rest_framework.views import APIView
 from .serializers import KPISerializer, AddActualKPISerializer, AddKPISerializer, PlanKPISerializer
@@ -162,7 +161,7 @@ class AddKPIView(APIView):
         try:
             kpi = KPI.objects.get(kpi_name = request.data.get("kpi_name"))
             if kpi:
-                user = User.objects.get(username = "corporate")
+                user = User.objects.get(id = kpi.user)
                 request.data['user'] = user.id
                 perspective = Perspective.objects.get(perspective_name = request.data['perspective'])
                 request.data['perspective'] = perspective.perspective_id
@@ -198,7 +197,7 @@ class EditKPIAPIView(APIView):
         try:
             kpi = KPI.objects.get(kpi_name=name)
             if kpi:
-                user = User.objects.get(username = "admin")
+                user = User.objects.get(id = kpi.user)
                 request.data['user'] = user.id
                 perspective = Perspective.objects.get(perspective_name = request.data['perspective'])
                 request.data['perspective'] = perspective.perspective_id
