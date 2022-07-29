@@ -7,7 +7,7 @@ from core.models import User
 # Create your models here.
 
 class Perspective(models.Model):
-    perspective_id = models.BigAutoField(primary_key=True, unique=True, editable=False)
+    perspective_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     perspective_name = models.CharField(max_length=120, blank=False)
     perspective_weight = models.FloatField(blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
@@ -17,7 +17,7 @@ class Perspective(models.Model):
 
 
 class Objectives(models.Model):
-    objective_id = models.BigAutoField(primary_key=True, unique=True, auto_created=True, editable=False)
+    objective_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     objective_name = models.CharField(max_length=120, blank=False)
     objective_weight = models.FloatField(blank=False)
     perspective = models.ForeignKey(Perspective, on_delete=models.CASCADE)
@@ -28,7 +28,7 @@ class Objectives(models.Model):
 
 
 class KPI(models.Model):
-    kpi_id = models.BigAutoField(primary_key=True, unique=True, auto_created=True, editable=False)
+    kpi_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     kpi_name = models.CharField(max_length=120, blank=False)
     kpi_target = models.FloatField(blank=True, default=0)
     kpi_weight = models.FloatField(blank=True, default=0)
