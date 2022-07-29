@@ -1,4 +1,6 @@
-from .models import KPI
+from dataclasses import fields
+from pyexpat import model
+from .models import KPI, Perspective
 from rest_framework import serializers
 
 
@@ -62,3 +64,8 @@ class AddKPISerializer(serializers.ModelSerializer):
 class ObjectiveSerializer(serializers.Serializer):
     perspective = serializers.CharField(max_length=120)
     objective_name = serializers.CharField(max_length=120)
+
+class PerspectiveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Perspective
+        fields = '__all__'
