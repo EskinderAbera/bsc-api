@@ -197,7 +197,7 @@ class EditKPIAPIView(APIView):
         try:
             kpi = KPI.objects.get(kpi_name=name)
             if kpi:
-                user = User.objects.get(id = kpi.user)
+                user = User.objects.get(id = kpi.user.id)
                 request.data['user'] = user.id
                 perspective = Perspective.objects.get(perspective_name = request.data['perspective'])
                 request.data['perspective'] = perspective.perspective_id
