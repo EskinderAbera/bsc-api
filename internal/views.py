@@ -134,23 +134,26 @@ class AddActualKPIAPIView(APIView):
             elif float(request.data.get("December", kpi.December)) != float(kpi.December) and  float(request.data.get("December")) > float(0) and float(kpi.December) > float(0):
                 return Response({"Error": "You have already added Actual Value for December!"}, status=status.HTTP_409_CONFLICT)
             else:
-                serializer.save()
-                kpi.Score_January = ((kpi.January/kpi.kpi_target)*100) * kpi.kpi_weight
-                kpi.Score_February = ((kpi.February/kpi.kpi_target)*100) * kpi.kpi_weight
-                kpi.Score_March = ((kpi.March/kpi.kpi_target)*100) * kpi.kpi_weight
-                kpi.Score_April = ((kpi.April/kpi.kpi_target)*100) * kpi.kpi_weight
-                kpi.Score_May = ((kpi.May/kpi.kpi_target)*100) * kpi.kpi_weight
-                kpi.Score_June = ((kpi.June/kpi.kpi_target)*100) * kpi.kpi_weight
-                kpi.Score_July = ((kpi.July/kpi.kpi_target)*100) * kpi.kpi_weight
-                kpi.Score_August = ((kpi.August/kpi.kpi_target)*100) * kpi.kpi_weight
-                kpi.Score_September = ((kpi.September/kpi.kpi_target)*100) * kpi.kpi_weight
-                kpi.Score_October = ((kpi.October/kpi.kpi_target)*100) * kpi.kpi_weight
-                kpi.Score_November = ((kpi.November/kpi.kpi_target)*100) * kpi.kpi_weight
-                kpi.Score_December = ((kpi.December/kpi.kpi_target)*100) * kpi.kpi_weight
-                kpi.aggregate = kpi.Score_January + kpi.Score_February + kpi.Score_March + kpi.Score_April + kpi.Score_May + kpi.Score_June + kpi.Score_July + kpi.Score_August + kpi.Score_September +  kpi.Score_October + kpi.Score_November + kpi.Score_December
-                kpi.save()
-                serializer = KPISerializer(kpi)
-                return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+                if kpi.kpi_target == 0:
+                    return Response({"Error":"KPI Target can't be zero!"}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    serializer.save()
+                    kpi.Score_January = ((kpi.January/kpi.kpi_target)*100) * kpi.kpi_weight
+                    kpi.Score_February = ((kpi.February/kpi.kpi_target)*100) * kpi.kpi_weight
+                    kpi.Score_March = ((kpi.March/kpi.kpi_target)*100) * kpi.kpi_weight
+                    kpi.Score_April = ((kpi.April/kpi.kpi_target)*100) * kpi.kpi_weight
+                    kpi.Score_May = ((kpi.May/kpi.kpi_target)*100) * kpi.kpi_weight
+                    kpi.Score_June = ((kpi.June/kpi.kpi_target)*100) * kpi.kpi_weight
+                    kpi.Score_July = ((kpi.July/kpi.kpi_target)*100) * kpi.kpi_weight
+                    kpi.Score_August = ((kpi.August/kpi.kpi_target)*100) * kpi.kpi_weight
+                    kpi.Score_September = ((kpi.September/kpi.kpi_target)*100) * kpi.kpi_weight
+                    kpi.Score_October = ((kpi.October/kpi.kpi_target)*100) * kpi.kpi_weight
+                    kpi.Score_November = ((kpi.November/kpi.kpi_target)*100) * kpi.kpi_weight
+                    kpi.Score_December = ((kpi.December/kpi.kpi_target)*100) * kpi.kpi_weight
+                    kpi.aggregate = kpi.Score_January + kpi.Score_February + kpi.Score_March + kpi.Score_April + kpi.Score_May + kpi.Score_June + kpi.Score_July + kpi.Score_August + kpi.Score_September +  kpi.Score_October + kpi.Score_November + kpi.Score_December
+                    kpi.save()
+                    serializer = KPISerializer(kpi)
+                    return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
