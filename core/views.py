@@ -114,7 +114,7 @@ class LoginViewSet(ModelViewSet, TokenObtainPairView):
         user = User.objects.get(id = serialized_data['user']['id'])
         if(user.department.dept_name == "admin" and user.subdepartment == None):
             kpis = user.ceo_user.all()
-        if(user.department.dept_name == "Banking Operations Scorecard" and user.subdepartment == None):
+        elif(user.department.dept_name == "Banking Operations Scorecard" and user.subdepartment == None):
             kpis = user.operation_user.all()
         elif (user.department.dept_name == "Corporate Banking Process" and user.subdepartment == None):
             kpis = user.corporate_user.all()
